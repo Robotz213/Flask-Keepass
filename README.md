@@ -65,4 +65,4 @@ Pull requests são bem-vindos! Para grandes mudanças, abra uma issue primeiro p
 
 ## Licença
 
-Licença [MIT](./license)
+Licença [MIT](./LICENSE)
