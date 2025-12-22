@@ -9,17 +9,17 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from .manager import KeepassManager
+    from .manager import KeePassManager
 
 
-def typed_wrap(cls: KeepassManager) -> type[KeepassManager]:
-    """Retorne a própria classe KeepassManager tipada.
+def typed_wrap(cls: type[KeePassManager]) -> type[KeePassManager]:
+    """Retorne a própria classe KeePassManager tipada.
 
     Args:
-        cls (KeepassManager): Classe do gerenciador Keepass.
+        cls (KeePassManager): Classe do gerenciador KeePass.
 
     Returns:
-        type[KeepassManager]: Tipo da classe KeepassManager.
+        type[KeePassManager]: Tipo da classe KeePassManager.
 
     """
     return cls

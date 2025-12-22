@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from flask_keepass.typing.kwargs import FindEntriesKwargs
 
 
-class KeepassManager(Protocol):
+class KeePassManager(Protocol):
     """Gerencie conexões e operações com arquivos KeePass.
 
     Esta classe permite inicializar, configurar e buscar
