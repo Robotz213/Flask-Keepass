@@ -10,6 +10,11 @@ Este projeto fornece uma extensão Flask para integração com arquivos KeePass,
 
 ```bash
 pip install flask-keepass
+
+# ou
+
+pip install "git+https://github.com/Robotz213/Flask-Keepass.git"
+
 ```
 
 ## Configuração
@@ -60,4 +65,4 @@ Pull requests são bem-vindos! Para grandes mudanças, abra uma issue primeiro p
 
 ## Licença
 
-MIT
+Licença [MIT](./license)
