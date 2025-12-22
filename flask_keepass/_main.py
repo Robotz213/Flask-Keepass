@@ -3,13 +3,15 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, ClassVar, Unpack, cast
 
-from pykeepass import PyKeePass
+from pykeepass import PyKeePass, create_database
 
 from flask_keepass.common.exceptions import AppRequiredError
 from flask_keepass.typing import ReturnFindEntries, typed_wrap
 from flask_keepass.typing.kwargs import KeePassConfig
 
 if TYPE_CHECKING:
+    from flask import Flask
+
     from flask_keepass.typing.manager import FindEntriesKwargs
 
 
@@ -21,21 +23,29 @@ class KeepassManager(PyKeePass):
 
         if kwargs.get("app") or kwargs.get("filename"):
             self._has_init = True
+
+            if kwargs.get("app"):
+                self.app: Flask = kwargs.get("app")
+
             config = self.load_config(kwargs)
-            path_file = Path(config["filename"])
+            if not Path(config["filename"]).exists():
+                create_database(
+                    filename=config["filename"],
+                    password=config["password"],
+                    keyfile=config["keyfile"],
+                    transformed_key=config["transformed_key"],
+                )
+
             super().__init__(**config)
 
-            if not path_file.exists():
-                self.save(str(path_file))
-
     def load_config(self, kwargs: KeePassConfig) -> KeePassConfig:
-        app = kwargs.get("app")
+        app: Flask = self.app
 
         if app:
             filename: str = str(app.config.get("KEEPASS_FILENAME"))
             password: str = str(app.config.get("KEEPASS_PASSWORD"))
-            keyfile: str = str(app.config.get("KEEPASS_KEYFILE"))
-            transformed_key = str(app.config.get("KEEPASS_TRANSFORMED_KEY"))
+            keyfile: str = app.config.get("KEEPASS_KEYFILE")
+            transformed_key = app.config.get("KEEPASS_TRANSFORMED_KEY")
 
             decrypt_ = str(app.config.get("KEEPASS_DECRYPT", "True"))
             decrypt = decrypt_.lower() in ["true", "1"]
@@ -50,8 +60,8 @@ class KeepassManager(PyKeePass):
 
         filename: str = str(kwargs["KEEPASS_FILENAME"])
         password: str = str(kwargs["KEEPASS_PASSWORD"])
-        keyfile: str = str(kwargs.get("KEEPASS_KEYFILE"))
-        transformed_key = str(kwargs.get("KEEPASS_TRANSFORMED_KEY"))
+        keyfile: str = kwargs.get("KEEPASS_KEYFILE")
+        transformed_key = kwargs.get("KEEPASS_TRANSFORMED_KEY")
 
         decrypt_ = str(kwargs.get("KEEPASS_DECRYPT", "True"))
         decrypt = decrypt_.lower() in ["true", "1"]
@@ -64,23 +74,26 @@ class KeepassManager(PyKeePass):
             decrypt=decrypt,
         )
 
-    def init_app(self, **kwargs: Unpack[KeePassConfig]) -> None:
+    def init_app(self, *args: Flask, **kwargs: Unpack[KeePassConfig]) -> None:
 
-        app = kwargs.get("app")
+        self.app = kwargs.get("app") or args[0] if args else None
 
-        if not app:
+        if not self.app:
             raise AppRequiredError
 
         if not self._has_init:
             config = self.load_config(kwargs)
+            if not Path(config["filename"]).exists():
+                create_database(
+                    filename=config["filename"],
+                    password=config["password"],
+                    keyfile=config["keyfile"],
+                    transformed_key=config["transformed_key"],
+                )
 
-            path_file = Path(config["filename"])
             super().__init__(**config)
 
-            if not path_file.exists():
-                self.save(str(path_file))
-
-        app.extensions["keepass"] = self
+        self.app.extensions["keepass"] = self
 
     def find_entries(
         self,

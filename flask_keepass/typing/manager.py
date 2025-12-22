@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Protocol, Unpack, overload
+from typing import TYPE_CHECKING, Unpack, overload
+
+from pykeepass import PyKeePass
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -15,7 +17,7 @@ if TYPE_CHECKING:
     from flask_keepass.typing.kwargs import FindEntriesKwargs
 
 
-class KeePassManager(Protocol):
+class KeePassManager(PyKeePass):
     """Gerencie conexões e operações com arquivos KeePass.
 
     Esta classe permite inicializar, configurar e buscar
