@@ -1,10 +1,16 @@
 [project]
 name = "flask-keepass"
 version = "0.1.0"
-description = "Add your description here"
+description = "Gerenciamento de senhas KeePass para aplicativos Flask."
 readme = "README.md"
 requires-python = ">=3.14"
-dependencies = [
-    "flask>=3.1.2",
-    "pykeepass>=4.1.1.post1",
+dependencies = ["flask>=3.1.2", "pykeepass>=4.1.1.post1"]
+
+authors = [
+    { name = "Nicholas Silva <Robotz213>", email = "nicholas@robotz.dev" },
 ]
+
+
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"

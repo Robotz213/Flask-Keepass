@@ -5,6 +5,6 @@ relacionadas à tipagem estática utilizadas em todo o projeto.
 """
 
 from ._types import ReturnFindEntries
-from ._wraps import _typed
+from .wraps import typed_wrap
 
-__all__ = ["ReturnFindEntries", "_typed"]
+__all__ = ["ReturnFindEntries", "typed_wrap"]
