@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from pathlib import Path
 from typing import TYPE_CHECKING, ClassVar, Unpack, cast
 
 from pykeepass import PyKeePass
@@ -21,14 +22,18 @@ class KeepassManager(PyKeePass):
         if kwargs.get("app") or kwargs.get("filename"):
             self._has_init = True
             config = self.load_config(kwargs)
+            path_file = Path(config["filename"])
             super().__init__(**config)
+
+            if not path_file.exists():
+                self.save(str(path_file))
 
     def load_config(self, kwargs: KeePassConfig) -> KeePassConfig:
         app = kwargs.get("app")
 
         if app:
-            filename: str = str(app.config["KEEPASS_FILENAME"])
-            password: str = str(app.config["KEEPASS_PASSWORD"])
+            filename: str = str(app.config.get("KEEPASS_FILENAME"))
+            password: str = str(app.config.get("KEEPASS_PASSWORD"))
             keyfile: str = str(app.config.get("KEEPASS_KEYFILE"))
             transformed_key = str(app.config.get("KEEPASS_TRANSFORMED_KEY"))
 
@@ -68,7 +73,12 @@ class KeepassManager(PyKeePass):
 
         if not self._has_init:
             config = self.load_config(kwargs)
+
+            path_file = Path(config["filename"])
             super().__init__(**config)
+
+            if not path_file.exists():
+                self.save(str(path_file))
 
         app.extensions["keepass"] = self
 
@@ -80,6 +90,3 @@ class KeepassManager(PyKeePass):
             "ReturnFindEntries",
             super().find_entries(**kwargs),
         )
-
-
-KeepassManager()
