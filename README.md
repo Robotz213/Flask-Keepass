@@ -1,10 +1,16 @@
 # Flask-Keepass
 
+![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
+
+> Disclaimer: Apenas documentação foi gerado usando IA, o código-fonte é 100% humano.
+
 Gerencie bancos de dados KeePass em aplicações Flask de forma simples e segura, utilizando PyKeePass como backend.
 
 ## Propósito
 
 Este projeto fornece uma extensão Flask para integração com arquivos KeePass, facilitando operações como leitura e busca de entradas diretamente do seu app Flask.
+
+Pensado também em inserir tipagem estática para maior segurança e facilidade de uso.
 
 ## Instalação
 
