@@ -5,14 +5,14 @@ from typing import TYPE_CHECKING, ClassVar, Unpack, cast
 
 from pykeepass import PyKeePass, create_database
 
+from flask_keepass._typing import ReturnFindEntries, typed_wrap
+from flask_keepass._typing.kwargs import KeePassConfig
 from flask_keepass.common.exceptions import AppRequiredError
-from flask_keepass.typing import ReturnFindEntries, typed_wrap
-from flask_keepass.typing.kwargs import KeePassConfig
 
 if TYPE_CHECKING:
     from flask import Flask
 
-    from flask_keepass.typing.manager import FindEntriesKwargs
+    from flask_keepass._typing.manager import FindEntriesKwargs
 
 
 @typed_wrap

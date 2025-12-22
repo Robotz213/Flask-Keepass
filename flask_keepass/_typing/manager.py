@@ -13,8 +13,8 @@ if TYPE_CHECKING:
     from flask import Flask
     from pykeepass import Group
 
-    from flask_keepass.typing._types import ReturnFindEntries, ReturnFindEntry
-    from flask_keepass.typing.kwargs import FindEntriesKwargs
+    from flask_keepass._typing._types import ReturnFindEntries, ReturnFindEntry
+    from flask_keepass._typing.kwargs import FindEntriesKwargs
 
 
 class KeePassManager(PyKeePass):
