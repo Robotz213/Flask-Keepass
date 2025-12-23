@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import platform
 from pathlib import Path
 from typing import TYPE_CHECKING, ClassVar, Unpack, cast
 
@@ -42,7 +43,10 @@ class KeepassManager(PyKeePass):
         app: Flask = self.app
 
         if app:
-            filename: str = str(app.config.get("KEEPASS_FILENAME"))
+            filename = Path(app.config["KEEPASS_FILENAME"])
+            if platform.system() == "Linux":
+                filename = filename.as_posix()
+
             password: str = str(app.config.get("KEEPASS_PASSWORD"))
             keyfile: str = app.config.get("KEEPASS_KEYFILE")
             transformed_key = app.config.get("KEEPASS_TRANSFORMED_KEY")
@@ -51,14 +55,17 @@ class KeepassManager(PyKeePass):
             decrypt = decrypt_.lower() in ["true", "1"]
 
             return KeePassConfig(
-                filename=filename,
+                filename=str(filename),
                 password=password,
                 keyfile=keyfile,
                 transformed_key=transformed_key,
                 decrypt=decrypt,
             )
 
-        filename: str = str(kwargs["KEEPASS_FILENAME"])
+        filename = Path(kwargs["KEEPASS_FILENAME"])
+        if platform.system() == "Linux":
+            filename = filename.as_posix()
+
         password: str = str(kwargs["KEEPASS_PASSWORD"])
         keyfile: str = kwargs.get("KEEPASS_KEYFILE")
         transformed_key = kwargs.get("KEEPASS_TRANSFORMED_KEY")
@@ -67,7 +74,7 @@ class KeepassManager(PyKeePass):
         decrypt = decrypt_.lower() in ["true", "1"]
 
         return KeePassConfig(
-            filename=filename,
+            filename=str(filename),
             password=password,
             keyfile=keyfile,
             transformed_key=transformed_key,
